@@ -518,76 +518,225 @@ class HomeView extends StatelessWidget {
   Widget _buildModernFooter(BuildContext context) {
     bool isMobile = MediaQuery.of(context).size.width < 768;
     return Container(
-      padding: EdgeInsets.fromLTRB(isMobile ? 24 : 80, isMobile ? 60 : 80, isMobile ? 24 : 80, 40),
-      color: Colors.white,
+      padding: EdgeInsets.fromLTRB(isMobile ? 24 : 80, isMobile ? 80 : 120, isMobile ? 24 : 80, 60),
+      color: isMobile ? const Color(0xFFFBFBFB) : AppTheme.deepForest,
       child: Column(
         children: [
-          if (isMobile)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('SATTVA', style: GoogleFonts.montserrat(fontWeight: FontWeight.w900, letterSpacing: 4, fontSize: 24)),
-                const SizedBox(height: 20),
-                Text("Authentic Ayurvedic experiences since 1924.", style: TextStyle(color: Colors.grey[600])),
-                const SizedBox(height: 40),
-                _footerColumn("SHOP", ["Digestion", "Immunity", "Skin Care"]),
-                const SizedBox(height: 32),
-                _footerColumn("SUPPORT", ["Contact Us", "Shipping", "Returns"]),
-              ],
-            )
-          else
-            Row(
+          LayoutBuilder(builder: (context, constraints) {
+            if (isMobile) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _footerBrandSection(isMobile),
+                  const SizedBox(height: 48),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: _footerColumn("SHOP", ["Digestion", "Immunity", "Skin Care", "Hair Rituals"], isMobile)),
+                      Expanded(child: _footerColumn("SUPPORT", ["Contact Us", "Shipping", "Returns", "FAQ"], isMobile)),
+                    ],
+                  ),
+                  const SizedBox(height: 48),
+                  _footerContactSection(isMobile),
+                ],
+              );
+            }
+            return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('SATTVA', style: GoogleFonts.montserrat(fontWeight: FontWeight.w900, letterSpacing: 4, fontSize: 24)),
-                      const SizedBox(height: 20),
-                      Text(
-                        "Crafting authentic Ayurvedic experiences for the modern world since 1924.",
-                        style: TextStyle(color: Colors.grey[600], height: 1.8),
-                      ),
-                    ],
-                  ),
-                ),
-                const Spacer(),
-                _footerColumn("SHOP", ["Digestion", "Immunity", "Skin", "Hair"]),
-                _footerColumn("RESOURCES", ["Our Story", "The Ashram", "Ayurveda 101"]),
-                _footerColumn("SUPPORT", ["Contact Us", "Shipping", "Returns"]),
+                Expanded(flex: 3, child: _footerBrandSection(isMobile)),
+                const Spacer(flex: 1),
+                Expanded(flex: 2, child: _footerColumn("SHOP", ["Digestion", "Immunity", "Skin Care", "Hair Rituals", "Stress Relief"], isMobile)),
+                Expanded(flex: 2, child: _footerColumn("RESOURCES", ["Our Story", "The Ashram", "Ayurveda 101", "Journal", "Sustainability"], isMobile)),
+                Expanded(flex: 2, child: _footerColumn("SUPPORT", ["Contact Us", "Track Order", "Shipping", "Returns", "Wholesale"], isMobile)),
+                Expanded(flex: 3, child: _footerContactSection(isMobile)),
               ],
-            ),
-          const SizedBox(height: 60),
-          const Divider(),
+            );
+          }),
+          const SizedBox(height: 100),
+          Divider(color: isMobile ? const Color(0xFFEEEEEE) : Colors.white10),
           const SizedBox(height: 40),
-          Flex(
-            direction: isMobile ? Axis.vertical : Axis.horizontal,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("© 2024 SATTVA RITUALS.", style: GoogleFonts.montserrat(fontSize: 10, letterSpacing: 1, fontWeight: FontWeight.w600)),
-              if (isMobile) const SizedBox(height: 12),
-              Text("PRIVACY / TERMS", style: GoogleFonts.montserrat(fontSize: 10, letterSpacing: 1, fontWeight: FontWeight.w600)),
-            ],
-          ),
+          _footerBottomSection(isMobile),
         ],
       ),
     );
   }
 
-  Widget _footerColumn(String title, List<String> items) {
+  Widget _footerBrandSection(bool isMobile) {
+    Color textColor = isMobile ? AppTheme.deepForest : Colors.white;
+    Color subTextColor = isMobile ? Colors.grey[600]! : Colors.white70;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 10, letterSpacing: 2)),
-        const SizedBox(height: 16),
+        Row(
+          children: [
+            const Icon(Icons.eco, color: AppTheme.primaryGreen, size: 32),
+            const SizedBox(width: 12),
+            Text(
+              'SATTVA',
+              style: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w900,
+                letterSpacing: 4,
+                fontSize: 28,
+                color: textColor,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+        Text(
+          "Authentic Ayurvedic rituals handcrafted with wisdom and delivered from our heart to your home. Established in 1924, preserved for the modern soul.",
+          style: GoogleFonts.poppins(
+            color: subTextColor,
+            height: 1.8,
+            fontSize: 14,
+          ),
+        ),
+        const SizedBox(height: 32),
+        Row(
+          children: [
+            _socialIcon(Icons.facebook, isMobile),
+            _socialIcon(Icons.camera_alt_outlined, isMobile),
+            _socialIcon(Icons.alternate_email, isMobile),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _footerContactSection(bool isMobile) {
+    Color textColor = isMobile ? AppTheme.deepForest : Colors.white;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "VISIT OUR ASHRAM",
+          style: GoogleFonts.montserrat(
+            fontWeight: FontWeight.w800,
+            fontSize: 12,
+            letterSpacing: 2,
+            color: textColor,
+          ),
+        ),
+        const SizedBox(height: 32),
+        _contactInfo(Icons.location_on_outlined, "123 Wisdom Valley, Rishikesh, Uttarakhand, India", isMobile),
+        const SizedBox(height: 20),
+        _contactInfo(Icons.phone_outlined, "+91 800 123 4567", isMobile),
+        const SizedBox(height: 20),
+        _contactInfo(Icons.email_outlined, "hello@sattvarituals.com", isMobile),
+      ],
+    );
+  }
+
+  Widget _contactInfo(IconData icon, String text, bool isMobile) {
+    Color subTextColor = isMobile ? Colors.grey[600]! : Colors.white70;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 20, color: AppTheme.primaryGreen),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Text(
+            text,
+            style: GoogleFonts.poppins(
+              color: subTextColor,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _socialIcon(IconData icon, bool isMobile) {
+    Color borderColor = isMobile ? const Color(0xFFEEEEEE) : Colors.white24;
+    Color iconColor = isMobile ? AppTheme.deepForest : Colors.white;
+    return Container(
+      margin: const EdgeInsets.only(right: 16),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        border: Border.all(color: borderColor),
+        shape: BoxShape.circle,
+      ),
+      child: Icon(icon, color: iconColor, size: 20),
+    );
+  }
+
+  Widget _footerColumn(String title, List<String> items, bool isMobile) {
+    Color titleColor = isMobile ? AppTheme.deepForest : Colors.white;
+    Color itemColor = isMobile ? Colors.grey[600]! : Colors.white70;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: GoogleFonts.montserrat(
+            fontWeight: FontWeight.w800,
+            fontSize: 12,
+            letterSpacing: 2,
+            color: titleColor,
+          ),
+        ),
+        const SizedBox(height: 32),
         ...items.map((item) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Text(item, style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+              padding: const EdgeInsets.only(bottom: 16),
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Text(
+                  item,
+                  style: GoogleFonts.poppins(
+                    color: itemColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
             )),
       ],
+    );
+  }
+
+  Widget _footerBottomSection(bool isMobile) {
+    Color textColor = isMobile ? AppTheme.deepForest.withOpacity(0.6) : Colors.white38;
+    return Flex(
+      direction: isMobile ? Axis.vertical : Axis.horizontal,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "© 2024 SATTVA RITUALS. CRAFTED BY WISDOM.",
+          style: GoogleFonts.montserrat(
+            fontSize: 11,
+            letterSpacing: 1.5,
+            fontWeight: FontWeight.w700,
+            color: textColor,
+          ),
+        ),
+        if (isMobile) const SizedBox(height: 24),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _bottomLink("PRIVACY POLICY", isMobile),
+            const SizedBox(width: 32),
+            _bottomLink("TERMS OF SERVICE", isMobile),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _bottomLink(String text, bool isMobile) {
+    Color textColor = isMobile ? AppTheme.deepForest.withOpacity(0.6) : Colors.white38;
+    return Text(
+      text,
+      style: GoogleFonts.montserrat(
+        fontSize: 11,
+        letterSpacing: 1.5,
+        fontWeight: FontWeight.w700,
+        color: textColor,
+      ),
     );
   }
 }
