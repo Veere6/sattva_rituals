@@ -573,7 +573,8 @@ class HomeView extends StatelessWidget {
       children: [
         Row(
           children: [
-            const Icon(Icons.eco, color: AppTheme.primaryGreen, size: 32),
+            Image.asset("assets/icon/Sattva.png",height: 40,width: 40,),
+            // const Icon(Icons.eco, color: AppTheme.primaryGreen, size: 32),
             const SizedBox(width: 12),
             Text(
               'SATTVA',

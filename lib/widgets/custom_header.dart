@@ -43,12 +43,13 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(8),
+                  // padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppTheme.primaryGreen.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.eco, color: AppTheme.primaryGreen, size: 20),
+                  child: Image.asset("assets/icon/Sattva.png",height: 40,width: 40,),
+                  // child: const Icon(Icons.eco, color: AppTheme.primaryGreen, size: 20),
                 ),
                 const SizedBox(width: 8),
                 Text(
