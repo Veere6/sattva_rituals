@@ -18,33 +18,77 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomHeader(), // Using the dedicated custom header
+      appBar: const CustomHeader(),
+      drawer: _buildMobileDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildHeroSection(),
+            _buildHeroSection(context),
             _buildCategoryRibbon(),
             _buildModernSectionHeader("Curated for You", "Our Popular Products"),
-            _buildProductGrid(),
-            _buildFullWidthPromo(),
+            _buildProductGrid(context),
+            _buildFullWidthPromo(context),
             _buildModernSectionHeader("Browse by Ritual", "Shop by Category"),
-            _buildModernCategorySection(),
-            _buildAyurvedaPhilosophySection(),
+            _buildModernCategorySection(context),
+            _buildAyurvedaPhilosophySection(context),
             _buildModernSectionHeader("Trusted by Thousands", "Customer Testimonials"),
-            _buildModernReviewSection(),
+            _buildModernReviewSection(context),
             _buildModernSectionHeader("Ancient Secrets", "Top Selling Rituals"),
-            _buildProductGrid(),
-            _buildNewsletterSection(),
-            _buildModernFooter(),
+            _buildProductGrid(context),
+            _buildNewsletterSection(context),
+            _buildModernFooter(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHeroSection() {
+  Widget _buildMobileDrawer() {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: const BoxDecoration(color: AppTheme.deepForest),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.eco, color: AppTheme.primaryGreen, size: 40),
+                const SizedBox(height: 10),
+                Text(
+                  'SATTVA RITUALS',
+                  style: GoogleFonts.montserrat(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          _drawerItem("SHOP", Icons.shopping_bag_outlined),
+          _drawerItem("OUR STORY", Icons.history),
+          _drawerItem("AYURVEDA 101", Icons.menu_book),
+          _drawerItem("JOURNAL", Icons.article_outlined),
+        ],
+      ),
+    );
+  }
+
+  Widget _drawerItem(String title, IconData icon) {
+    return ListTile(
+      leading: Icon(icon, color: AppTheme.deepForest),
+      title: Text(title, style: GoogleFonts.montserrat(fontWeight: FontWeight.w600)),
+      onTap: () => Get.back(),
+    );
+  }
+
+  Widget _buildHeroSection(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    bool isMobile = screenWidth < 768;
+
     return Container(
-      height: 600,
+      height: isMobile ? 400 : 600,
       width: double.infinity,
       child: Stack(
         children: [
@@ -69,75 +113,70 @@ class HomeView extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 60,
-            bottom: 100,
-            child: AnimationConfiguration.synchronized(
-              child: FadeInAnimation(
-                duration: const Duration(seconds: 1),
-                child: SlideAnimation(
-                  verticalOffset: 50,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryGreen,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: const Text(
-                          "ESTD. 1924",
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, letterSpacing: 1),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        "Ancient Wisdom\nFor Modern Life",
-                        style: GoogleFonts.playfairDisplay(
-                          fontSize: 64,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white,
-                          height: 1.1,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        "Handcrafted Ayurvedic rituals delivered from our ashram to your home.",
-                        style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          color: Colors.white.withOpacity(0.9),
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                      const SizedBox(height: 40),
-                      Row(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: AppTheme.deepForest,
-                              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-                            ),
-                            child: const Text("SHOP COLLECTION", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1)),
-                          ),
-                          const SizedBox(width: 20),
-                          OutlinedButton(
-                            onPressed: () {},
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Colors.white, width: 2),
-                              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-                            ),
-                            child: const Text("OUR STORY", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, letterSpacing: 1)),
-                          ),
-                        ],
-                      ),
-                    ],
+            left: isMobile ? 24 : 60,
+            bottom: isMobile ? 40 : 100,
+            right: isMobile ? 24 : null,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryGreen,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: const Text(
+                    "ESTD. 1924",
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10, letterSpacing: 1),
                   ),
                 ),
-              ),
+                const SizedBox(height: 16),
+                Text(
+                  "Ancient Wisdom\nFor Modern Life",
+                  style: GoogleFonts.playfairDisplay(
+                    fontSize: isMobile ? 36 : 64,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    height: 1.1,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  "Handcrafted Ayurvedic rituals delivered home.",
+                  style: GoogleFonts.poppins(
+                    fontSize: isMobile ? 14 : 18,
+                    color: Colors.white.withOpacity(0.9),
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                Wrap(
+                  spacing: 16,
+                  runSpacing: 16,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: AppTheme.deepForest,
+                        padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 40, vertical: isMobile ? 16 : 20),
+                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                      ),
+                      child: const Text("SHOP COLLECTION", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1)),
+                    ),
+                    if (!isMobile)
+                      OutlinedButton(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Colors.white, width: 2),
+                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                        ),
+                        child: const Text("OUR STORY", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                      ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],
@@ -148,7 +187,7 @@ class HomeView extends StatelessWidget {
   Widget _buildCategoryRibbon() {
     final categories = ["DIGESTION", "IMMUNITY", "HAIR CARE", "SKIN RITUALS", "STRESS RELIEF"];
     return Container(
-      height: 80,
+      height: 60,
       color: AppTheme.deepForest,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -156,14 +195,14 @@ class HomeView extends StatelessWidget {
         itemBuilder: (context, index) {
           return Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
                 categories[index],
                 style: GoogleFonts.montserrat(
                   color: Colors.white.withOpacity(0.7),
                   fontWeight: FontWeight.w600,
                   letterSpacing: 2,
-                  fontSize: 14,
+                  fontSize: 12,
                 ),
               ),
             ),
@@ -174,58 +213,63 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _buildModernSectionHeader(String subtitle, String title) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 80, 24, 40),
-      child: Column(
-        children: [
-          Text(
-            subtitle.toUpperCase(),
-            style: GoogleFonts.montserrat(
-              color: AppTheme.primaryGreen,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 3,
-              fontSize: 12,
+    return Builder(builder: (context) {
+      bool isMobile = MediaQuery.of(context).size.width < 768;
+      return Padding(
+        padding: EdgeInsets.fromLTRB(24, isMobile ? 40 : 80, 24, isMobile ? 20 : 40),
+        child: Column(
+          children: [
+            Text(
+              subtitle.toUpperCase(),
+              textAlign: TextAlign.center,
+              style: GoogleFonts.montserrat(
+                color: AppTheme.primaryGreen,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 3,
+                fontSize: 10,
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            title,
-            style: GoogleFonts.playfairDisplay(
-              fontSize: 40,
-              fontWeight: FontWeight.w700,
-              color: AppTheme.deepForest,
+            const SizedBox(height: 12),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.playfairDisplay(
+                fontSize: isMobile ? 28 : 40,
+                fontWeight: FontWeight.w700,
+                color: AppTheme.deepForest,
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Container(
-            width: 60,
-            height: 2,
-            color: AppTheme.primaryGreen,
-          ),
-        ],
-      ),
-    );
+            const SizedBox(height: 16),
+            Container(width: 40, height: 2, color: AppTheme.primaryGreen),
+          ],
+        ),
+      );
+    });
   }
 
-  Widget _buildProductGrid() {
+  Widget _buildProductGrid(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    int crossAxisCount = screenWidth > 1200 ? 4 : (screenWidth > 768 ? 3 : 2);
+    double padding = screenWidth > 768 ? 60 : 16;
+
     return Obx(() {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 60),
+        padding: EdgeInsets.symmetric(horizontal: padding),
         child: GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            childAspectRatio: 0.7,
-            crossAxisSpacing: 30,
-            mainAxisSpacing: 30,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            childAspectRatio: 0.65,
+            crossAxisSpacing: screenWidth > 768 ? 30 : 12,
+            mainAxisSpacing: screenWidth > 768 ? 30 : 12,
           ),
           itemCount: productController.products.length,
           itemBuilder: (context, index) {
             return AnimationConfiguration.staggeredGrid(
               position: index,
               duration: const Duration(milliseconds: 500),
-              columnCount: 4,
+              columnCount: crossAxisCount,
               child: ScaleAnimation(
                 child: FadeInAnimation(
                   child: ProductCard(product: productController.products[index], index: index),
@@ -238,10 +282,11 @@ class HomeView extends StatelessWidget {
     });
   }
 
-  Widget _buildFullWidthPromo() {
+  Widget _buildFullWidthPromo(BuildContext context) {
+    bool isMobile = MediaQuery.of(context).size.width < 768;
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 80),
-      height: 400,
+      margin: EdgeInsets.symmetric(vertical: isMobile ? 40 : 80),
+      height: isMobile ? 300 : 400,
       width: double.infinity,
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -251,27 +296,30 @@ class HomeView extends StatelessWidget {
       ),
       child: Container(
         color: AppTheme.deepForest.withOpacity(0.7),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "CLEANSE. HEAL. NOURISH.",
-              style: GoogleFonts.montserrat(color: Colors.white, letterSpacing: 4, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+              style: GoogleFonts.montserrat(color: Colors.white, letterSpacing: 4, fontWeight: FontWeight.bold, fontSize: isMobile ? 12 : 14),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             Text(
               "Seasonal Detox Collection",
-              style: GoogleFonts.playfairDisplay(fontSize: 48, color: Colors.white, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+              style: GoogleFonts.playfairDisplay(fontSize: isMobile ? 28 : 48, color: Colors.white, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.primaryGreen,
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
               ),
-              child: const Text("SHOP THE COLLECTION"),
+              child: const Text("SHOP COLLECTION"),
             ),
           ],
         ),
@@ -279,89 +327,105 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildModernCategorySection() {
+  Widget _buildModernCategorySection(BuildContext context) {
+    bool isMobile = MediaQuery.of(context).size.width < 768;
     final rituals = [
       {'name': 'MORNING RITUAL', 'img': 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=400'},
       {'name': 'EVENING CALM', 'img': 'https://images.unsplash.com/photo-1512428813834-c702c7702b78?q=80&w=400'},
       {'name': 'INNER GLOW', 'img': 'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?q=80&w=400'},
     ];
+
+    if (isMobile) {
+      return SizedBox(
+        height: 400,
+        child: PageView.builder(
+          itemCount: rituals.length,
+          itemBuilder: (context, index) {
+            return _ritualItem(rituals[index], isMobile: true);
+          },
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 60),
       child: Row(
-        children: rituals.map((ritual) {
-          return Expanded(
-            child: Container(
-              height: 500,
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage(ritual['img']!), fit: BoxFit.cover),
-              ),
-              child: Container(
-                color: Colors.black.withOpacity(0.2),
-                child: Center(
-                  child: Text(
-                    ritual['name']!,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.montserrat(color: Colors.white, fontWeight: FontWeight.w900, letterSpacing: 4, fontSize: 24),
-                  ),
-                ),
-              ),
-            ),
-          );
-        }).toList(),
+        children: rituals.map((ritual) => Expanded(child: _ritualItem(ritual))).toList(),
       ),
     );
   }
 
-  Widget _buildAyurvedaPhilosophySection() {
+  Widget _ritualItem(Map<String, String> ritual, {bool isMobile = false}) {
     return Container(
-      padding: const EdgeInsets.all(100),
+      height: isMobile ? 400 : 500,
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        image: DecorationImage(image: NetworkImage(ritual['img']!), fit: BoxFit.cover),
+      ),
+      child: Container(
+        color: Colors.black.withOpacity(0.2),
+        child: Center(
+          child: Text(
+            ritual['name']!,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.montserrat(
+              color: Colors.white,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 4,
+              fontSize: isMobile ? 20 : 24,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAyurvedaPhilosophySection(BuildContext context) {
+    bool isMobile = MediaQuery.of(context).size.width < 768;
+    return Container(
+      padding: EdgeInsets.all(isMobile ? 24 : 100),
       color: const Color(0xFFF9F6F2),
-      child: Row(
+      child: Flex(
+        direction: isMobile ? Axis.vertical : Axis.horizontal,
         children: [
           Expanded(
+            flex: isMobile ? 0 : 1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("OUR PHILOSOPHY", style: GoogleFonts.montserrat(color: AppTheme.primaryGreen, letterSpacing: 3, fontWeight: FontWeight.bold)),
+                Text("OUR PHILOSOPHY", style: GoogleFonts.montserrat(color: AppTheme.primaryGreen, letterSpacing: 3, fontWeight: FontWeight.bold, fontSize: 10)),
                 const SizedBox(height: 20),
                 Text(
-                  "Balance is not something you find, it's something you create.",
-                  style: GoogleFonts.playfairDisplay(fontSize: 48, fontWeight: FontWeight.bold, height: 1.2),
+                  "Balance is something you create.",
+                  style: GoogleFonts.playfairDisplay(fontSize: isMobile ? 32 : 48, fontWeight: FontWeight.bold, height: 1.2),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 24),
                 Text(
-                  "We believe that true beauty and health come from a harmonious connection between the mind, body, and soul. Our products are formulated using 5,000-year-old traditional techniques.",
-                  style: GoogleFonts.poppins(fontSize: 18, color: Colors.grey[700], height: 1.8),
+                  "We believe that true beauty and health come from a harmonious connection between the mind, body, and soul.",
+                  style: GoogleFonts.poppins(fontSize: isMobile ? 14 : 18, color: Colors.grey[700], height: 1.8),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 32),
                 TextButton(
                   onPressed: () {},
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("LEARN ABOUT AYURVEDA", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, color: AppTheme.deepForest, letterSpacing: 1)),
+                      Text("LEARN MORE", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, color: AppTheme.deepForest, letterSpacing: 1, fontSize: 12)),
                       const SizedBox(width: 10),
-                      const Icon(Icons.arrow_forward, color: AppTheme.primaryGreen),
+                      const Icon(Icons.arrow_forward, color: AppTheme.primaryGreen, size: 16),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 100),
+          if (!isMobile) const SizedBox(width: 100),
+          if (isMobile) const SizedBox(height: 40),
           Expanded(
-            child: Stack(
-              children: [
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: Container(width: 400, height: 500, color: AppTheme.primaryGreen.withOpacity(0.1)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(40),
-                  child: Image.network('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=800'),
-                ),
-              ],
+            flex: isMobile ? 0 : 1,
+            child: Image.network(
+              'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=800',
+              fit: BoxFit.cover,
             ),
           ),
         ],
@@ -369,38 +433,39 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildModernReviewSection() {
+  Widget _buildModernReviewSection(BuildContext context) {
+    bool isMobile = MediaQuery.of(context).size.width < 768;
     return Container(
-      height: 400,
+      height: 350,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 60),
+        padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 60),
         itemCount: 5,
         itemBuilder: (context, index) {
           return Container(
-            width: 400,
-            margin: const EdgeInsets.only(right: 30),
-            padding: const EdgeInsets.all(40),
+            width: isMobile ? 300 : 400,
+            margin: const EdgeInsets.only(right: 20),
+            padding: EdgeInsets.all(isMobile ? 24 : 40),
             color: Colors.white,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.format_quote, color: AppTheme.primaryGreen, size: 48),
-                const SizedBox(height: 20),
+                const Icon(Icons.format_quote, color: AppTheme.primaryGreen, size: 32),
+                const SizedBox(height: 16),
                 Text(
-                  "The Ashwagandha rituals have completely transformed my evening routine. I feel more centered and rested than ever before.",
-                  style: GoogleFonts.playfairDisplay(fontSize: 20, fontStyle: FontStyle.italic, color: AppTheme.deepForest),
+                  "The Ashwagandha rituals have completely transformed my evening routine. I feel more centered and rested.",
+                  style: GoogleFonts.playfairDisplay(fontSize: isMobile ? 16 : 20, fontStyle: FontStyle.italic, color: AppTheme.deepForest),
                 ),
                 const Spacer(),
                 Row(
                   children: [
-                    const CircleAvatar(backgroundColor: AppTheme.primaryGreen, child: Text("A", style: TextStyle(color: Colors.white))),
-                    const SizedBox(width: 15),
+                    const CircleAvatar(radius: 16, backgroundColor: AppTheme.primaryGreen, child: Text("A", style: TextStyle(color: Colors.white, fontSize: 12))),
+                    const SizedBox(width: 12),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("ANANYA SHARMA", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 14)),
-                        Text("Verified Customer", style: TextStyle(color: Colors.grey[600], fontSize: 12)),
+                        Text("ANANYA SHARMA", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 12)),
+                        Text("Verified Customer", style: TextStyle(color: Colors.grey[600], fontSize: 10)),
                       ],
                     ),
                   ],
@@ -413,29 +478,34 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildNewsletterSection() {
+  Widget _buildNewsletterSection(BuildContext context) {
+    bool isMobile = MediaQuery.of(context).size.width < 768;
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 100),
+      padding: EdgeInsets.symmetric(vertical: isMobile ? 60 : 100, horizontal: 24),
       width: double.infinity,
       color: AppTheme.deepForest,
       child: Column(
         children: [
-          Text("JOIN THE RITUAL", style: GoogleFonts.montserrat(color: AppTheme.primaryGreen, letterSpacing: 4, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 20),
-          Text("Get 15% off your first order", style: GoogleFonts.playfairDisplay(fontSize: 40, color: Colors.white, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 40),
+          Text("JOIN THE RITUAL", style: GoogleFonts.montserrat(color: AppTheme.primaryGreen, letterSpacing: 4, fontWeight: FontWeight.bold, fontSize: 10)),
+          const SizedBox(height: 16),
+          Text(
+            "Get 15% off first order",
+            textAlign: TextAlign.center,
+            style: GoogleFonts.playfairDisplay(fontSize: isMobile ? 28 : 40, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 32),
           SizedBox(
-            width: 500,
+            width: isMobile ? double.infinity : 500,
             child: TextField(
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: "YOUR EMAIL ADDRESS",
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.5), letterSpacing: 2),
+                hintStyle: TextStyle(color: Colors.white.withOpacity(0.5), letterSpacing: 2, fontSize: 12),
                 enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
                 focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppTheme.primaryGreen)),
                 suffixIcon: TextButton(
                   onPressed: () {},
-                  child: const Text("SUBSCRIBE", style: TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
+                  child: const Text("JOIN", style: TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
                 ),
               ),
             ),
@@ -445,79 +515,79 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildModernFooter() {
+  Widget _buildModernFooter(BuildContext context) {
+    bool isMobile = MediaQuery.of(context).size.width < 768;
     return Container(
-      padding: const EdgeInsets.fromLTRB(80, 80, 80, 40),
+      padding: EdgeInsets.fromLTRB(isMobile ? 24 : 80, isMobile ? 60 : 80, isMobile ? 24 : 80, 40),
       color: Colors.white,
       child: Column(
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                flex: 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('SATTVA', style: GoogleFonts.montserrat(fontWeight: FontWeight.w900, letterSpacing: 4, fontSize: 24)),
-                    const SizedBox(height: 20),
-                    Text(
-                      "Crafting authentic Ayurvedic experiences for the modern world since 1924. Our mission is to bring balance to your daily life through ancient rituals.",
-                      style: TextStyle(color: Colors.grey[600], height: 1.8),
-                    ),
-                    const SizedBox(height: 30),
-                    Row(
-                      children: [
-                        _socialIcon(Icons.facebook),
-                        _socialIcon(Icons.camera_alt),
-                        _socialIcon(Icons.alternate_email),
-                      ],
-                    ),
-                  ],
+          if (isMobile)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('SATTVA', style: GoogleFonts.montserrat(fontWeight: FontWeight.w900, letterSpacing: 4, fontSize: 24)),
+                const SizedBox(height: 20),
+                Text("Authentic Ayurvedic experiences since 1924.", style: TextStyle(color: Colors.grey[600])),
+                const SizedBox(height: 40),
+                _footerColumn("SHOP", ["Digestion", "Immunity", "Skin Care"]),
+                const SizedBox(height: 32),
+                _footerColumn("SUPPORT", ["Contact Us", "Shipping", "Returns"]),
+              ],
+            )
+          else
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('SATTVA', style: GoogleFonts.montserrat(fontWeight: FontWeight.w900, letterSpacing: 4, fontSize: 24)),
+                      const SizedBox(height: 20),
+                      Text(
+                        "Crafting authentic Ayurvedic experiences for the modern world since 1924.",
+                        style: TextStyle(color: Colors.grey[600], height: 1.8),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const Spacer(),
-              _footerColumn("SHOP", ["Digestion", "Immunity", "Skin", "Hair", "Stress"]),
-              _footerColumn("RESOURCES", ["Our Story", "The Ashram", "Ayurveda 101", "Journal"]),
-              _footerColumn("SUPPORT", ["Contact Us", "Shipping", "Returns", "Wholesale"]),
-            ],
-          ),
-          const SizedBox(height: 80),
+                const Spacer(),
+                _footerColumn("SHOP", ["Digestion", "Immunity", "Skin", "Hair"]),
+                _footerColumn("RESOURCES", ["Our Story", "The Ashram", "Ayurveda 101"]),
+                _footerColumn("SUPPORT", ["Contact Us", "Shipping", "Returns"]),
+              ],
+            ),
+          const SizedBox(height: 60),
           const Divider(),
           const SizedBox(height: 40),
-          Row(
+          Flex(
+            direction: isMobile ? Axis.vertical : Axis.horizontal,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("© 2024 SATTVA RITUALS. TRADITION IN EVERY DROP.", style: GoogleFonts.montserrat(fontSize: 10, letterSpacing: 1, fontWeight: FontWeight.w600)),
-              Text("PRIVACY POLICY / TERMS OF SERVICE", style: GoogleFonts.montserrat(fontSize: 10, letterSpacing: 1, fontWeight: FontWeight.w600)),
+              Text("© 2024 SATTVA RITUALS.", style: GoogleFonts.montserrat(fontSize: 10, letterSpacing: 1, fontWeight: FontWeight.w600)),
+              if (isMobile) const SizedBox(height: 12),
+              Text("PRIVACY / TERMS", style: GoogleFonts.montserrat(fontSize: 10, letterSpacing: 1, fontWeight: FontWeight.w600)),
             ],
           ),
         ],
       ),
-    );
-  }
-
-  Widget _socialIcon(IconData icon) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 20),
-      child: Icon(icon, color: AppTheme.deepForest, size: 20),
     );
   }
 
   Widget _footerColumn(String title, List<String> items) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: 2)),
-          const SizedBox(height: 20),
-          ...items.map((item) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Text(item, style: TextStyle(color: Colors.grey[600], fontSize: 14)),
-              )),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 10, letterSpacing: 2)),
+        const SizedBox(height: 16),
+        ...items.map((item) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(item, style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+            )),
+      ],
     );
   }
 }

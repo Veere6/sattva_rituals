@@ -14,6 +14,8 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final CartController cartController = Get.find<CartController>();
+    double screenWidth = MediaQuery.of(context).size.width;
+    bool isMobile = screenWidth < 768;
 
     return Container(
       height: 80,
@@ -23,9 +25,14 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
           bottom: BorderSide(color: Colors.grey.withOpacity(0.1), width: 1),
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 60),
+      padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 60),
       child: Row(
         children: [
+          if (isMobile)
+            IconButton(
+              icon: const Icon(Icons.menu, color: AppTheme.deepForest),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
           // Logo Section
           InkWell(
             onTap: () => Get.offAllNamed('/'),
@@ -37,30 +44,32 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                     color: AppTheme.primaryGreen.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.eco, color: AppTheme.primaryGreen, size: 24),
+                  child: const Icon(Icons.eco, color: AppTheme.primaryGreen, size: 20),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 8),
                 Text(
                   'SATTVA',
                   style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w900,
-                    letterSpacing: 4,
+                    letterSpacing: isMobile ? 2 : 4,
                     color: AppTheme.deepForest,
-                    fontSize: 22,
+                    fontSize: isMobile ? 16 : 22,
                   ),
                 ),
               ],
             ),
           ),
-          const Spacer(),
-          // Navigation Links
-          _navLink("SHOP"),
-          _navLink("OUR STORY"),
-          _navLink("AYURVEDA 101"),
-          _navLink("JOURNAL"),
-          const SizedBox(width: 40),
+          if (!isMobile) const Spacer(),
+          // Navigation Links (Desktop Only)
+          if (!isMobile) ...[
+            _navLink("SHOP"),
+            _navLink("OUR STORY"),
+            _navLink("AYURVEDA 101"),
+            _navLink("JOURNAL"),
+          ],
+          if (isMobile) const Spacer(),
           // Icon Actions
-          _headerIcon(Icons.search_rounded, () {}),
+          if (!isMobile) _headerIcon(Icons.search_rounded, () {}),
           _headerIcon(Icons.person_outline_rounded, () {}),
           Obx(() => _headerIcon(
                 Icons.shopping_cart_outlined,
@@ -92,24 +101,24 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
 
   Widget _headerIcon(IconData icon, VoidCallback onTap, {int badgeCount = 0}) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10),
+      padding: const EdgeInsets.only(left: 4),
       child: Stack(
         children: [
           IconButton(
             onPressed: onTap,
-            icon: Icon(icon, color: AppTheme.deepForest, size: 24),
+            icon: Icon(icon, color: AppTheme.deepForest, size: 22),
           ),
           if (badgeCount > 0)
             Positioned(
-              right: 8,
-              top: 8,
+              right: 4,
+              top: 4,
               child: Container(
                 padding: const EdgeInsets.all(4),
                 decoration: const BoxDecoration(color: AppTheme.primaryBlue, shape: BoxShape.circle),
-                constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                constraints: const BoxConstraints(minWidth: 14, minHeight: 14),
                 child: Text(
                   '$badgeCount',
-                  style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
               ),
