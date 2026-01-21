@@ -1,0 +1,50 @@
+[
+  {
+    "id": "p1",
+    "name": "Herb-Infused Hair Oil",
+    "description": "Traditional Ayurvedic hair oil with potent herbs for hair growth and scalp health.",
+    "price": 499.0,
+    "imageUrl": "https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&q=80&w=600",
+    "benefits": ["Strengthens Roots", "Prevents Hair Fall"],
+    "ingredients": ["Brahmi", "Bringaraj", "Coconut Oil"],
+    "usage": "Massage onto scalp twice a week.",
+    "stock": 15,
+    "isFavorite": false
+  },
+  {
+    "id": "p2",
+    "name": "Natural Glow Face Serum",
+    "description": "Brightening serum with saffron and sandalwood for a radiant complexion.",
+    "price": 850.0,
+    "imageUrl": "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&q=80&w=600",
+    "benefits": ["Radiant Glow", "Even Tone"],
+    "ingredients": ["Saffron", "Aloe Vera", "Vitamin E"],
+    "usage": "Apply 3-4 drops at night.",
+    "stock": 20,
+    "isFavorite": true
+  },
+  {
+    "id": "p3",
+    "name": "Pure Ashwagandha Tablets",
+    "description": "Premium adaptogenic supplement for stress management and energy.",
+    "price": 350.0,
+    "imageUrl": "https://images.unsplash.com/photo-1615485290382-441e4d0c9cb5?auto=format&fit=crop&q=80&w=600",
+    "benefits": ["Stress Relief", "Vitality"],
+    "ingredients": ["Organic Ashwagandha"],
+    "usage": "1 tablet twice daily.",
+    "stock": 10,
+    "isFavorite": false
+  },
+  {
+    "id": "p4",
+    "name": "Aloe Vera Soothing Gel",
+    "description": "Multipurpose cooling gel for skin hydration and sunburn relief.",
+    "price": 250.0,
+    "imageUrl": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&q=80&w=600",
+    "benefits": ["Cooling Effect", "Deep Hydration"],
+    "ingredients": ["99% Pure Aloe Vera"],
+    "usage": "Apply as needed on skin.",
+    "stock": 50,
+    "isFavorite": false
+  }
+]
