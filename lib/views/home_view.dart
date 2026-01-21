@@ -482,6 +482,7 @@ class HomeView extends StatelessWidget {
     bool isMobile = MediaQuery.of(context).size.width < 768;
     return Container(
       padding: EdgeInsets.symmetric(vertical: isMobile ? 60 : 100, horizontal: 24),
+      margin: EdgeInsets.symmetric(vertical: isMobile ? 60 : 5, horizontal: 0),
       width: double.infinity,
       color: AppTheme.deepForest,
       child: Column(
@@ -623,9 +624,9 @@ class HomeView extends StatelessWidget {
         const SizedBox(height: 32),
         _contactInfo(Icons.location_on_outlined, "123 Wisdom Valley, Rishikesh, Uttarakhand, India", isMobile),
         const SizedBox(height: 20),
-        _contactInfo(Icons.phone_outlined, "+91 800 123 4567", isMobile),
+        _contactInfo(Icons.phone_outlined, "+91 9131087223", isMobile),
         const SizedBox(height: 20),
-        _contactInfo(Icons.email_outlined, "hello@sattvarituals.com", isMobile),
+        _contactInfo(Icons.email_outlined, "info@sattvarituals.com", isMobile),
       ],
     );
   }

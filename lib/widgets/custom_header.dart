@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sattva_rituals/views/ayurveda_101_view.dart';
+import 'package:sattva_rituals/views/home_view.dart';
+import 'package:sattva_rituals/views/journal_view.dart';
 import '../theme/app_theme.dart';
 import '../controllers/cart_controller.dart';
 import '../views/cart_view.dart';
+import '../views/our_story_view.dart';
 
 class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
   const CustomHeader({super.key});
@@ -62,15 +66,15 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
           if (!isMobile) const Spacer(),
           // Navigation Links (Desktop Only)
           if (!isMobile) ...[
-            _navLink("SHOP"),
-            _navLink("OUR STORY"),
-            _navLink("AYURVEDA 101"),
-            _navLink("JOURNAL"),
+            _navLink("SHOP", () => Get.to(() => HomeView())),
+            _navLink("OUR STORY", () => Get.to(() => const OurStoryView())),
+            _navLink("AYURVEDA 101", () => Get.to(() => const Ayurveda101View())),
+            _navLink("JOURNAL", () => Get.to(() => const JournalView())),
           ],
           if (isMobile) const Spacer(),
           // Icon Actions
-          if (!isMobile) _headerIcon(Icons.search_rounded, () {}),
-          _headerIcon(Icons.person_outline_rounded, () {}),
+          // if (!isMobile) _headerIcon(Icons.search_rounded, () {}),
+          // _headerIcon(Icons.person_outline_rounded, () {}),
           Obx(() => _headerIcon(
                 Icons.shopping_cart_outlined,
                 () => Get.to(() => const CartView()),
@@ -81,11 +85,11 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget _navLink(String title) {
+  Widget _navLink(String title, VoidCallback onTap) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: TextButton(
-        onPressed: () {},
+        onPressed: onTap,
         child: Text(
           title,
           style: GoogleFonts.montserrat(
