@@ -1,4 +1,4 @@
-name: Flutter Web Deploy
+name: Flutter Web Deploy to Docs
 
 on:
   push:
@@ -10,23 +10,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
-          channel: 'stable'
+          channel: stable
 
-      - name: Flutter Pub Get
+      - name: Install dependencies
         run: flutter pub get
 
       - name: Build Flutter Web
         run: flutter build web --base-href /sattva_rituals/
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Clean docs folder
+        run: |
+          rm -rf docs
+          mkdir docs
+
+      - name: Copy build to docs
+        run: cp -r build/web/* docs/
+
+      - name: Commit and push docs
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/web
+          commit_message: "Auto deploy Flutter web to docs"
