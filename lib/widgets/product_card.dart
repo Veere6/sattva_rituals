@@ -82,7 +82,7 @@ class ProductCard extends StatelessWidget {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 12, 15, 8),
+                    padding: const EdgeInsets.fromLTRB(15, 8, 15, 6),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -96,7 +96,7 @@ class ProductCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 6),
                         Text(
                           product.name.toUpperCase(),
                           maxLines: 1,
@@ -141,7 +141,7 @@ class ProductCard extends StatelessWidget {
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     onPressed: () => cartController.addToCart(product),
                     child: Text(
