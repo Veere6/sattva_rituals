@@ -59,7 +59,7 @@ class CartController extends GetxController {
   Future<void> sendToWhatsApp() async {
     if (cartItems.isEmpty) return;
 
-    String phoneNumber = "1234567890"; // Replace with actual number
+    String phoneNumber = "9131087223"; // Replace with actual number
     String message = "✨ *Sattva Rituals Order* ✨\n\n";
     
     for (var item in cartItems) {

@@ -18,6 +18,9 @@ class ProductDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    bool isMobile = screenWidth < 768;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomHeader(),
@@ -25,17 +28,22 @@ class ProductDetailView extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 80),
-              child: Row(
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? 24 : 60, 
+                vertical: isMobile ? 40 : 80
+              ),
+              child: Flex(
+                direction: isMobile ? Axis.vertical : Axis.horizontal,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Left Side: Large Image Gallery
                   Expanded(
-                    flex: 1,
+                    flex: isMobile ? 0 : 1,
                     child: Hero(
                       tag: 'product_image_${product.id}',
                       child: Container(
-                        height: 800,
+                        height: isMobile ? 400 : 800,
+                        width: double.infinity,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: NetworkImage(product.imageUrl),
@@ -45,10 +53,10 @@ class ProductDetailView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 80),
+                  SizedBox(width: isMobile ? 0 : 80, height: isMobile ? 40 : 0),
                   // Right Side: Details
                   Expanded(
-                    flex: 1,
+                    flex: isMobile ? 0 : 1,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -58,14 +66,14 @@ class ProductDetailView extends StatelessWidget {
                             color: AppTheme.primaryGreen,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 2,
-                            fontSize: 12,
+                            fontSize: 10,
                           ),
                         ),
                         const SizedBox(height: 16),
                         Text(
                           product.name.toUpperCase(),
                           style: GoogleFonts.playfairDisplay(
-                            fontSize: 48,
+                            fontSize: isMobile ? 32 : 48,
                             fontWeight: FontWeight.w900,
                             color: AppTheme.deepForest,
                             height: 1.1,
@@ -77,7 +85,7 @@ class ProductDetailView extends StatelessWidget {
                             Text(
                               "₹${product.price}",
                               style: GoogleFonts.montserrat(
-                                fontSize: 32,
+                                fontSize: isMobile ? 24 : 32,
                                 fontWeight: FontWeight.w800,
                                 color: AppTheme.deepForest,
                               ),
@@ -101,12 +109,12 @@ class ProductDetailView extends StatelessWidget {
                         Text(
                           product.description,
                           style: GoogleFonts.poppins(
-                            fontSize: 16,
+                            fontSize: isMobile ? 14 : 16,
                             color: Colors.grey[700],
                             height: 1.8,
                           ),
                         ),
-                        const Divider(height: 80),
+                        Divider(height: isMobile ? 60 : 80),
                         _buildSectionHeader("BENEFITS"),
                         _buildChecklist(product.benefits),
                         const SizedBox(height: 40),
@@ -120,6 +128,7 @@ class ProductDetailView extends StatelessWidget {
                             fontStyle: FontStyle.italic,
                             color: AppTheme.deepForest,
                             height: 1.6,
+                            fontSize: isMobile ? 14 : 16,
                           ),
                         ),
                         const SizedBox(height: 60),
@@ -140,6 +149,7 @@ class ProductDetailView extends StatelessWidget {
                                       backgroundColor: AppTheme.deepForest,
                                       colorText: Colors.white,
                                       borderRadius: 0,
+                                      margin: const EdgeInsets.all(16),
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -168,7 +178,7 @@ class ProductDetailView extends StatelessWidget {
                 ],
               ),
             ),
-            _buildRelatedProducts(),
+            _buildRelatedProducts(context),
             const SizedBox(height: 100),
           ],
         ),
@@ -184,7 +194,7 @@ class ProductDetailView extends StatelessWidget {
         style: GoogleFonts.montserrat(
           fontWeight: FontWeight.w800,
           letterSpacing: 2,
-          fontSize: 14,
+          fontSize: 12,
           color: AppTheme.deepForest,
         ),
       ),
@@ -197,9 +207,9 @@ class ProductDetailView extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 12),
         child: Row(
           children: [
-            const Icon(Icons.eco_outlined, color: AppTheme.primaryGreen, size: 18),
+            const Icon(Icons.eco_outlined, color: AppTheme.primaryGreen, size: 16),
             const SizedBox(width: 12),
-            Text(item, style: GoogleFonts.poppins(color: Colors.grey[800])),
+            Expanded(child: Text(item, style: GoogleFonts.poppins(color: Colors.grey[800], fontSize: 13))),
           ],
         ),
       )).toList(),
@@ -216,7 +226,7 @@ class ProductDetailView extends StatelessWidget {
         children: [
           _qtyBtn(Icons.remove, () => cartController.removeFromCart(product)),
           Container(
-            width: 60,
+            width: 50,
             alignment: Alignment.center,
             child: Obx(() => Text(
               '${product.quantityInCart.value}',
@@ -233,10 +243,10 @@ class ProductDetailView extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: 50,
+        width: 44,
         height: 64,
         alignment: Alignment.center,
-        child: Icon(icon, size: 16, color: AppTheme.deepForest),
+        child: Icon(icon, size: 14, color: AppTheme.deepForest),
       ),
     );
   }
@@ -254,37 +264,41 @@ class ProductDetailView extends StatelessWidget {
   Widget _policyRow(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: Colors.grey),
+        Icon(icon, size: 16, color: Colors.grey),
         const SizedBox(width: 12),
-        Text(text, style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+        Text(text, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
       ],
     );
   }
 
-  Widget _buildRelatedProducts() {
+  Widget _buildRelatedProducts(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    bool isMobile = screenWidth < 768;
+    int crossAxisCount = screenWidth > 1200 ? 4 : (screenWidth > 768 ? 3 : 2);
+    
     // Filter out current product
     final related = productController.products.where((p) => p.id != product.id).take(4).toList();
     
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 60),
+      padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 60),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Divider(height: 120),
+          Divider(height: isMobile ? 80 : 120),
           Text(
             "COMPLETING THE RITUAL",
             style: GoogleFonts.montserrat(
               color: AppTheme.primaryGreen,
               fontWeight: FontWeight.w700,
               letterSpacing: 3,
-              fontSize: 12,
+              fontSize: 10,
             ),
           ),
           const SizedBox(height: 12),
           Text(
             "Related Products",
             style: GoogleFonts.playfairDisplay(
-              fontSize: 40,
+              fontSize: isMobile ? 28 : 40,
               fontWeight: FontWeight.w700,
               color: AppTheme.deepForest,
             ),
@@ -293,18 +307,18 @@ class ProductDetailView extends StatelessWidget {
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              childAspectRatio: 0.7,
-              crossAxisSpacing: 30,
-              mainAxisSpacing: 30,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              childAspectRatio: 0.65,
+              crossAxisSpacing: isMobile ? 12 : 30,
+              mainAxisSpacing: isMobile ? 12 : 30,
             ),
             itemCount: related.length,
             itemBuilder: (context, index) {
               return AnimationConfiguration.staggeredGrid(
                 position: index,
                 duration: const Duration(milliseconds: 500),
-                columnCount: 4,
+                columnCount: crossAxisCount,
                 child: ScaleAnimation(
                   child: FadeInAnimation(
                     child: ProductCard(product: related[index], index: index),
