@@ -2,11 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
 import '../controllers/product_controller.dart';
 import '../controllers/cart_controller.dart';
 import '../widgets/product_card.dart';
 import '../widgets/custom_header.dart';
+import '../widgets/instagram_reel_player.dart';
+import '../models/footer_model.dart';
+import 'our_story_view.dart';
+import 'ayurveda_101_view.dart';
+import 'journal_view.dart';
+import 'info_view.dart';
+import 'support_views.dart';
+import 'legal_views.dart';
+import 'shop_views.dart';
+import 'resource_views.dart';
 
 class HomeView extends StatelessWidget {
   HomeView({super.key});
@@ -28,6 +39,8 @@ class HomeView extends StatelessWidget {
             _buildModernSectionHeader("Curated for You", "Our Popular Products"),
             _buildProductGrid(context),
             _buildFullWidthPromo(context),
+            _buildModernSectionHeader("Social Rituals", "Join our Community"),
+            _buildInstagramReelsSection(context),
             _buildModernSectionHeader("Browse by Ritual", "Shop by Category"),
             _buildModernCategorySection(context),
             _buildAyurvedaPhilosophySection(context),
@@ -43,44 +56,197 @@ class HomeView extends StatelessWidget {
     );
   }
 
+  Widget _buildInstagramReelsSection(BuildContext context) {
+    bool isMobile = MediaQuery.of(context).size.width < 768;
+    const String reelId = 'DDgIUkFt9Xh';
+
+    return Container(
+      height: 480,
+      margin: const EdgeInsets.only(bottom: 20),
+      child: isMobile 
+        ? Center(
+            child: Container(
+              width: 300,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 30,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: const InstagramReelPlayer(reelId: reelId, width: 300, height: 450),
+              ),
+            ),
+          )
+        : AnimationLimiter(
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 60),
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  duration: const Duration(milliseconds: 600),
+                  child: SlideAnimation(
+                    horizontalOffset: 50.0,
+                    child: FadeInAnimation(
+                      child: Container(
+                        width: 320,
+                        margin: const EdgeInsets.only(right: 30),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 20,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: const InstagramReelPlayer(reelId: reelId, width: 320, height: 450),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+    );
+  }
+
   Widget _buildMobileDrawer() {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
         children: [
           DrawerHeader(
             decoration: const BoxDecoration(color: AppTheme.deepForest),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Icon(Icons.eco, color: AppTheme.primaryGreen, size: 40),
-                const SizedBox(height: 10),
-                Text(
-                  'SATTVA RITUALS',
-                  style: GoogleFonts.montserrat(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("assets/icon/Sattva.png", height: 50, width: 50),
+                  const SizedBox(height: 12),
+                  Text(
+                    'SATTVA RITUALS',
+                    style: GoogleFonts.montserrat(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 18,
+                      letterSpacing: 2,
+                    ),
                   ),
-                ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                _drawerItem("SHOP", Icons.shopping_bag_outlined, () => Get.back()),
+                _drawerItem("OUR STORY", Icons.history, () {
+                  Get.back();
+                  Get.to(() => const OurStoryView());
+                }),
+                _drawerItem("AYURVEDA 101", Icons.menu_book, () {
+                  Get.back();
+                  Get.to(() => const Ayurveda101View());
+                }),
+                _drawerItem("JOURNAL", Icons.article_outlined, () {
+                  Get.back();
+                  Get.to(() => const JournalView());
+                }),
+                const Divider(height: 40),
+                _drawerItem("CONTACT US", Icons.mail_outline, () => Get.to(() => const ContactUsView())),
+                _drawerItem("TRACK ORDER", Icons.local_shipping_outlined, () => Get.to(() => const TrackOrderView())),
               ],
             ),
           ),
-          _drawerItem("SHOP", Icons.shopping_bag_outlined),
-          _drawerItem("OUR STORY", Icons.history),
-          _drawerItem("AYURVEDA 101", Icons.menu_book),
-          _drawerItem("JOURNAL", Icons.article_outlined),
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              children: [
+                Text(
+                  "ESTABLISHED 1924",
+                  style: GoogleFonts.montserrat(
+                    color: Colors.grey,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.facebook, size: 20, color: AppTheme.deepForest.withOpacity(0.5)),
+                    const SizedBox(width: 20),
+                    Icon(Icons.camera_alt_outlined, size: 20, color: AppTheme.deepForest.withOpacity(0.5)),
+                  ],
+                )
+              ],
+            ),
+          )
         ],
       ),
     );
   }
 
-  Widget _drawerItem(String title, IconData icon) {
+  Widget _drawerItem(String title, IconData icon, VoidCallback onTap) {
     return ListTile(
-      leading: Icon(icon, color: AppTheme.deepForest),
-      title: Text(title, style: GoogleFonts.montserrat(fontWeight: FontWeight.w600)),
-      onTap: () => Get.back(),
+      leading: Icon(icon, color: AppTheme.deepForest, size: 22),
+      title: Text(
+        title,
+        style: GoogleFonts.montserrat(
+          fontWeight: FontWeight.w700,
+          fontSize: 13,
+          letterSpacing: 1.5,
+          color: AppTheme.deepForest,
+        ),
+      ),
+      onTap: onTap,
     );
+  }
+
+  void _navigateToInfo(String title) {
+    // Router logic to map string titles to specific view classes
+    switch (title) {
+      // Shop links
+      case "Digestion": Get.to(() => const DigestionView()); break;
+      case "Immunity": Get.to(() => const ImmunityView()); break;
+      case "Skin Care": Get.to(() => const SkinCareView()); break;
+      case "Hair Rituals": Get.to(() => const HairRitualsView()); break;
+      case "Stress Relief": Get.to(() => const StressReliefView()); break;
+      
+      // Resource links
+      case "Our Story": Get.to(() => const OurStoryView()); break;
+      case "The Ashram": Get.to(() => const TheAshramView()); break;
+      case "Ayurveda 101": Get.to(() => const Ayurveda101View()); break;
+      case "Journal": Get.to(() => const JournalView()); break;
+      case "Sustainability": Get.to(() => const SustainabilityView()); break;
+      
+      // Support links
+      case "Contact Us": Get.to(() => const ContactUsView()); break;
+      case "Track Order": Get.to(() => const TrackOrderView()); break;
+      case "Shipping": Get.to(() => const ShippingView()); break;
+      case "Returns": Get.to(() => const ReturnsView()); break;
+      case "Wholesale": Get.to(() => const WholesaleView()); break;
+      
+      // Legal links
+      case "Privacy Policy": Get.to(() => const PrivacyPolicyView()); break;
+      case "Terms of Service": Get.to(() => const TermsOfServiceView()); break;
+      
+      default:
+        Get.to(() => InfoView(title: title, content: "Details about $title coming soon..."));
+    }
   }
 
   Widget _buildHeroSection(BuildContext context) {
@@ -249,6 +415,7 @@ class HomeView extends StatelessWidget {
 
   Widget _buildProductGrid(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    bool isMobile = screenWidth < 768;
     int crossAxisCount = screenWidth > 1200 ? 4 : (screenWidth > 768 ? 3 : 2);
     double padding = screenWidth > 768 ? 60 : 16;
 
@@ -260,7 +427,7 @@ class HomeView extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: crossAxisCount,
-            childAspectRatio: 0.65,
+            childAspectRatio: isMobile ? 0.58 : 0.65,
             crossAxisSpacing: screenWidth > 768 ? 30 : 12,
             mainAxisSpacing: screenWidth > 768 ? 30 : 12,
           ),
@@ -533,8 +700,8 @@ class HomeView extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(child: _footerColumn("SHOP", ["Digestion", "Immunity", "Skin Care", "Hair Rituals"], isMobile)),
-                      Expanded(child: _footerColumn("SUPPORT", ["Contact Us", "Shipping", "Returns", "FAQ"], isMobile)),
+                      Expanded(child: _footerColumn(FooterData.shopLinks[0], isMobile)),
+                      Expanded(child: _footerColumn(FooterData.supportLinks[0], isMobile)),
                     ],
                   ),
                   const SizedBox(height: 48),
@@ -548,9 +715,9 @@ class HomeView extends StatelessWidget {
               children: [
                 Expanded(flex: 3, child: _footerBrandSection(isMobile)),
                 const Spacer(flex: 1),
-                Expanded(flex: 2, child: _footerColumn("SHOP", ["Digestion", "Immunity", "Skin Care", "Hair Rituals", "Stress Relief"], isMobile)),
-                Expanded(flex: 2, child: _footerColumn("RESOURCES", ["Our Story", "The Ashram", "Ayurveda 101", "Journal", "Sustainability"], isMobile)),
-                Expanded(flex: 2, child: _footerColumn("SUPPORT", ["Contact Us", "Track Order", "Shipping", "Returns", "Wholesale"], isMobile)),
+                Expanded(flex: 2, child: _footerColumn(FooterData.shopLinks[0], isMobile)),
+                Expanded(flex: 2, child: _footerColumn(FooterData.resourceLinks[0], isMobile)),
+                Expanded(flex: 2, child: _footerColumn(FooterData.supportLinks[0], isMobile)),
                 Expanded(flex: 3, child: _footerContactSection(isMobile)),
               ],
             );
@@ -623,11 +790,11 @@ class HomeView extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 32),
-        _contactInfo(Icons.location_on_outlined, "123 Wisdom Valley, Rishikesh, Uttarakhand, India", isMobile),
+        _contactInfo(Icons.location_on_outlined, FooterData.address, isMobile),
         const SizedBox(height: 20),
-        _contactInfo(Icons.phone_outlined, "+91 9131087223", isMobile),
+        _contactInfo(Icons.phone_outlined, FooterData.phone, isMobile),
         const SizedBox(height: 20),
-        _contactInfo(Icons.email_outlined, "info@sattvarituals.com", isMobile),
+        _contactInfo(Icons.email_outlined, FooterData.email, isMobile),
       ],
     );
   }
@@ -666,7 +833,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _footerColumn(String title, List<String> items, bool isMobile) {
+  Widget _footerColumn(FooterLink link, bool isMobile) {
     Color titleColor = isMobile ? AppTheme.deepForest : Colors.white;
     Color itemColor = isMobile ? Colors.grey[600]! : Colors.white70;
 
@@ -674,7 +841,7 @@ class HomeView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          title,
+          link.title,
           style: GoogleFonts.montserrat(
             fontWeight: FontWeight.w800,
             fontSize: 12,
@@ -683,16 +850,19 @@ class HomeView extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 32),
-        ...items.map((item) => Padding(
+        ...link.items.map((item) => Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: MouseRegion(
                 cursor: SystemMouseCursors.click,
-                child: Text(
-                  item,
-                  style: GoogleFonts.poppins(
-                    color: itemColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
+                child: GestureDetector(
+                  onTap: () => _navigateToInfo(item),
+                  child: Text(
+                    item,
+                    style: GoogleFonts.poppins(
+                      color: itemColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
               ),
@@ -720,9 +890,15 @@ class HomeView extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _bottomLink("PRIVACY POLICY", isMobile),
+            GestureDetector(
+              onTap: () => _navigateToInfo("Privacy Policy"),
+              child: _bottomLink("PRIVACY POLICY", isMobile),
+            ),
             const SizedBox(width: 32),
-            _bottomLink("TERMS OF SERVICE", isMobile),
+            GestureDetector(
+              onTap: () => _navigateToInfo("Terms of Service"),
+              child: _bottomLink("TERMS OF SERVICE", isMobile),
+            ),
           ],
         ),
       ],

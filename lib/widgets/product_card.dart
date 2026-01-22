@@ -133,27 +133,53 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryBlue,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                    onPressed: () => cartController.addToCart(product),
-                    child: Text(
-                      "ADD TO CART",
-                      style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w800,
-                        fontSize: 11,
-                        letterSpacing: 2,
-                      ),
-                    ),
-                  ),
-                ),
+                Obx(() => product.quantityInCart.value > 0
+                    ? Container(
+                        height: 40,
+                        color: AppTheme.primaryBlue,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            IconButton(
+                              onPressed: () => cartController.removeFromCart(product),
+                              icon: const Icon(Icons.remove, color: Colors.white, size: 18),
+                            ),
+                            Text(
+                              "${product.quantityInCart.value}",
+                              style: GoogleFonts.montserrat(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 14,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () => cartController.addToCart(product),
+                              icon: const Icon(Icons.add, color: Colors.white, size: 18),
+                            ),
+                          ],
+                        ),
+                      )
+                    : SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppTheme.primaryBlue,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          onPressed: () => cartController.addToCart(product),
+                          child: Text(
+                            "ADD TO CART",
+                            style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 11,
+                              letterSpacing: 2,
+                            ),
+                          ),
+                        ),
+                      )),
               ],
             ),
           ),

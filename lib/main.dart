@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'theme/app_theme.dart';
-import 'views/home_view.dart';
+import 'views/main_layout.dart';
 import 'controllers/product_controller.dart';
 import 'controllers/cart_controller.dart';
 
@@ -26,7 +26,7 @@ class SattvaRitualsApp extends StatelessWidget {
       title: 'Sattva Rituals',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: HomeView(),
+      home: const MainLayout(),
     );
   }
 }

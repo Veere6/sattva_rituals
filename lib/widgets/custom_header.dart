@@ -32,11 +32,6 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
       padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 60),
       child: Row(
         children: [
-          if (isMobile)
-            IconButton(
-              icon: const Icon(Icons.menu, color: AppTheme.deepForest),
-              onPressed: () => Scaffold.of(context).openDrawer(),
-            ),
           // Logo Section
           InkWell(
             onTap: () => Get.offAllNamed('/'),
